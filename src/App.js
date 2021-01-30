@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { makeStyles } from '@material-ui/core'
+import NavBar from './components/NavBar'
+import { Switch, Route } from 'react-router-dom'
+import Login from './pages/Login'
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
+import CreateRoom from './pages/Create-room'
+import Main from './pages/Main'
+import Mylist from './pages/Mylist'
 
-function App() {
+const useStyles = makeStyles({
+  root: {
+    background: 'linear-gradient(45deg, #d3ebd3 30%, #84c887 90%)',
+    minHeight: '100vh',
+    direction: 'rtl',
+  },
+})
+
+const theme = createMuiTheme({
+  typography: {
+    fontFamily: ['David Libre', 'serif'],
+  },
+})
+
+const App = () => {
+  const classes = useStyles()
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <ThemeProvider theme={theme}>
+      <div className={classes.root}>
+        <NavBar />
+        <Switch>
+          <Route path="/login" component={Login} exact />
+          <Route path="/create-room" component={CreateRoom} exact />
+          <Route path="/" component={Main} exact />
+          <Route path="/my-list" component={Mylist} exact />
+        </Switch>
+      </div>
+    </ThemeProvider>
+  )
 }
 
-export default App;
+export default App
