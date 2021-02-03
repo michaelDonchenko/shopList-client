@@ -1,6 +1,11 @@
-import React from 'react'
-import { Button, makeStyles } from '@material-ui/core'
+import React, { useState } from 'react'
+import { Button, CircularProgress, makeStyles } from '@material-ui/core'
 import { Link } from 'react-router-dom'
+import { register, getRoom } from '../controllers/roomControllers'
+import { Alert } from '@material-ui/lab'
+import { TOKEN_INSERT } from '../types/tokenTypes'
+import { useDispatch } from 'react-redux'
+import { ROOM_LOGIN } from '../types/roomTypes'
 
 const useStyles = makeStyles((theme) => ({
   formBlock: {
@@ -35,6 +40,46 @@ const useStyles = makeStyles((theme) => ({
 
 const CreateRoomForm = () => {
   const classes = useStyles()
+  const dispatch = useDispatch()
+
+  const [state, setState] = useState({
+    loading: '',
+    error: '',
+    name: '',
+    password: '',
+    passwordConfirm: '',
+  })
+
+  const { loading, error, name, password, passwordConfirm } = state
+
+  const handleChange = (e) => {
+    setState({ ...state, [e.target.name]: e.target.value })
+  }
+
+  const handleRegister = async (e) => {
+    e.preventDefault()
+    setState({ ...state, loading: true })
+    try {
+      const { data } = await register(name, password, passwordConfirm)
+      localStorage.setItem('token', JSON.stringify(data.token))
+
+      dispatch({
+        type: TOKEN_INSERT,
+        payload: data.token,
+      })
+
+      const roomResponse = await getRoom(data.token)
+      localStorage.setItem('roomDetails', JSON.stringify(roomResponse.data))
+
+      dispatch({
+        type: ROOM_LOGIN,
+        payload: { id: roomResponse.data._id, name: roomResponse.data.name },
+      })
+    } catch (error) {
+      setState({ ...state, loading: false, error: error.response.data.error })
+    }
+  }
+
   return (
     <div
       style={{
@@ -42,18 +87,52 @@ const CreateRoomForm = () => {
         justifyContent: 'center',
       }}
     >
-      <form className={classes.formBlock}>
+      <form onSubmit={handleRegister} className={classes.formBlock}>
+        {loading && (
+          <div style={{ textAlign: 'center', margin: '15px 0' }}>
+            <CircularProgress />
+          </div>
+        )}
+
         <label htmlFor="fname">שם החדר</label>
-        <input className={classes.textField} type="text" name="name" />
+        <input
+          onChange={handleChange}
+          value={name}
+          className={classes.textField}
+          type="text"
+          name="name"
+        />
         <label htmlFor="lname">סיסמה</label>
-        <input className={classes.textField} type="password" name="password" />
+        <input
+          onChange={handleChange}
+          value={password}
+          className={classes.textField}
+          type="password"
+          name="password"
+        />
         <label htmlFor="lname">בדוק סיסמה</label>
         <input
+          onChange={handleChange}
+          value={passwordConfirm}
           className={classes.textField}
           type="password"
           name="passwordConfirm"
         />
-        <Button className={classes.button} variant="contained">
+
+        {error && (
+          <Alert
+            variant="filled"
+            style={{ margin: '15px 0' }}
+            severity="error"
+            onClose={() => {
+              setState({ ...state, error: false })
+            }}
+          >
+            {<spn style={{ margin: '0 10px' }}>{error}</spn>}
+          </Alert>
+        )}
+
+        <Button type="submit" className={classes.button} variant="contained">
           צור חדר
         </Button>
         <div>

@@ -1,0 +1,2 @@
+export const TOKEN_INSERT = 'TOKEN_INSERT'
+export const TOKEN_REMOVE = 'TOKEN_REMOVE'

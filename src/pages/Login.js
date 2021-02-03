@@ -1,19 +1,27 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core'
 import LoginForm from '../components/LoginForm'
+import { useSelector } from 'react-redux'
 
 const useStyles = makeStyles({
-  heading1: {
+  heading: {
     textAlign: 'center',
     color: '#d3ebd3',
   },
 })
 
-const Login = () => {
+const Login = ({ history }) => {
+  const room = useSelector((state) => state.room)
+  const token = useSelector((state) => state.token)
+
+  {
+    room && token && history.push('/')
+  }
+
   const classes = useStyles()
   return (
     <div>
-      <h1 className={classes.heading1}>התחבר</h1>
+      <h1 className={classes.heading}>התחבר</h1>
       <LoginForm />
     </div>
   )

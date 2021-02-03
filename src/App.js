@@ -7,6 +7,8 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import CreateRoom from './pages/Create-room'
 import Main from './pages/Main'
 import Mylist from './pages/Mylist'
+import Favorites from './pages/Favorites'
+import PrivateRoute from './components/routes/PrivateRoute'
 
 const useStyles = makeStyles({
   root: {
@@ -32,8 +34,9 @@ const App = () => {
         <Switch>
           <Route path="/login" component={Login} exact />
           <Route path="/create-room" component={CreateRoom} exact />
-          <Route path="/" component={Main} exact />
-          <Route path="/my-list" component={Mylist} exact />
+          <PrivateRoute path="/" component={Main} exact />
+          <PrivateRoute path="/my-list" component={Mylist} exact />
+          <PrivateRoute path="/favorites" component={Favorites} exact />
         </Switch>
       </div>
     </ThemeProvider>
