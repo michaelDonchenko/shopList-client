@@ -8,13 +8,12 @@ import { ROOM_LOGOUT } from '../types/roomTypes'
 
 const useStyles = makeStyles({
   root: {
-    backgroundColor: '#004d40',
+    backgroundColor: '#ef6c00',
     padding: 0,
   },
   navLink: {
     textDecoration: 'none',
     color: 'white',
-    borderLeft: '1px solid',
   },
 })
 
@@ -47,8 +46,7 @@ const NavBar = () => {
           <>
             <NavLink
               activeStyle={{
-                backgroundColor: '#00695c',
-                color: '#ffc107',
+                backgroundColor: '#e65100',
               }}
               className={classes.navLink}
               to="/login"
@@ -65,8 +63,7 @@ const NavBar = () => {
 
             <NavLink
               activeStyle={{
-                backgroundColor: '#00695c',
-                color: '#ffc107',
+                backgroundColor: '#e65100',
               }}
               className={classes.navLink}
               to="/create-room"

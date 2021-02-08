@@ -12,9 +12,10 @@ import PrivateRoute from './components/routes/PrivateRoute'
 
 const useStyles = makeStyles({
   root: {
-    background: 'linear-gradient(45deg, #d3ebd3 30%, #84c887 90%)',
+    background: 'linear-gradient(45deg, black 30%, #757575 90%)',
     minHeight: '100vh',
     direction: 'rtl',
+    color: 'white',
   },
 })
 

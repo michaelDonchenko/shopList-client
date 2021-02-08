@@ -25,11 +25,11 @@ const useStyles = makeStyles((theme) => ({
   button: {
     borderRadius: '9999em',
     margin: '15px 0',
-    backgroundColor: '#ffc107',
+    backgroundColor: '#ef6c00',
     fontSize: '16px',
     color: 'white',
     '&:hover': {
-      backgroundColor: '#ffa000',
+      backgroundColor: '#e65100',
     },
   },
   link: {

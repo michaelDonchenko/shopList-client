@@ -25,6 +25,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import AddFavoriteDialog from '../components/AddFavoriteDialog'
 import { Alert } from '@material-ui/lab'
 import EditFavoriteDialog from '../components/EditFavoriteDialog'
+import FavoriteIcon from '@material-ui/icons/Favorite'
 
 const useStyles = makeStyles({
   root: {
@@ -41,9 +42,9 @@ const useStyles = makeStyles({
     margin: '5px',
     width: '200px',
     borderRadius: '9999em',
-    backgroundColor: 'white',
+    backgroundColor: '#f5f5f5',
     '&:hover': {
-      backgroundColor: 'white',
+      backgroundColor: '#eeeeee',
     },
   },
   tableDiv: {
@@ -56,11 +57,11 @@ const useStyles = makeStyles({
     width: '100%',
     margin: '30px 0',
     borderRadius: '9999em',
-    backgroundColor: '#00796b',
-    color: 'white',
+    backgroundColor: '#f5f5f5',
+    color: 'black',
     fontSize: '16px',
     '&:hover': {
-      backgroundColor: '#00796b',
+      backgroundColor: '#eeeeee',
     },
   },
   link: {
@@ -72,7 +73,7 @@ const useStyles = makeStyles({
   },
   header: {
     textAlign: 'center',
-    color: '#004d40',
+    color: 'black',
     backgroundColor: 'white',
   },
   editIcon: {
@@ -248,6 +249,9 @@ const Favorites = () => {
       </div>
       <div className={classes.heading}>
         <Button
+          endIcon={
+            <FavoriteIcon style={{ color: 'orange', marginRight: '10px' }} />
+          }
           onClick={handleClickOpen}
           className={classes.headingButton}
           variant="contained"

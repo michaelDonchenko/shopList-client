@@ -17,22 +17,22 @@ const useStyles = makeStyles({
     width: '100%',
     margin: '15px 0',
     borderRadius: '9999em',
-    backgroundColor: '#ffc107',
-    color: 'white',
+    backgroundColor: '#ffe0b2',
+    color: 'black',
     fontSize: '16px',
     '&:hover': {
-      backgroundColor: '#ffa000',
+      backgroundColor: '#ffcc80',
     },
   },
   favoritesButton: {
     width: '100%',
     margin: '15px 0',
     borderRadius: '9999em',
-    backgroundColor: '#00796b',
-    color: 'white',
+    backgroundColor: '#f5f5f5',
+    color: 'black',
     fontSize: '16px',
     '&:hover': {
-      backgroundColor: '#00796b',
+      backgroundColor: '#eeeeee',
     },
   },
   link: {

@@ -48,7 +48,7 @@ const useStyles = makeStyles({
     borderRadius: '9999em',
     backgroundColor: 'white',
     '&:hover': {
-      backgroundColor: 'white',
+      backgroundColor: '#ffcc80',
     },
   },
   tableDiv: {
@@ -61,11 +61,11 @@ const useStyles = makeStyles({
     width: '100%',
     margin: '30px auto',
     borderRadius: '9999em',
-    backgroundColor: 'white',
+    backgroundColor: '#ffe0b2',
     color: 'black',
     fontSize: '16px',
     '&:hover': {
-      backgroundColor: 'white',
+      backgroundColor: '#ffcc80',
     },
   },
   link: {
@@ -77,7 +77,7 @@ const useStyles = makeStyles({
   },
   header: {
     textAlign: 'center',
-    color: '#004d40',
+    color: 'black',
     backgroundColor: 'white',
   },
   editIcon: {
