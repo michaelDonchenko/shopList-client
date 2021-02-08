@@ -46,8 +46,8 @@ const LoginForm = () => {
   const [state, setState] = useState({
     loading: '',
     error: '',
-    name: 'טסט',
-    password: '123456',
+    name: '',
+    password: '',
   })
 
   const { loading, error, name, password } = state
