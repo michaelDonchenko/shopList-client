@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import {
   Button,
+  Checkbox,
+  CircularProgress,
   makeStyles,
   Paper,
   Table,
@@ -9,10 +11,25 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
 } from '@material-ui/core'
 import { Link } from 'react-router-dom'
-import { getRoom } from '../controllers/roomControllers'
+import {
+  getRoom,
+  addItem,
+  deleteItem,
+  editCurrentList,
+  updateChecked,
+  pushFromFavorites,
+} from '../controllers/roomControllers'
 import { useSelector } from 'react-redux'
+import EditIcon from '@material-ui/icons/Edit'
+import DeleteIcon from '@material-ui/icons/Delete'
+import AddNewItemDialog from '../components/AddNewItemDialog'
+import { Alert } from '@material-ui/lab'
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import EditCurrentListDialog from '../components/EditCurrentListDialog'
+import AddFromFavorites from '../components/AddFromFavorites'
 
 const useStyles = makeStyles({
   root: {
@@ -28,6 +45,7 @@ const useStyles = makeStyles({
   headingButton: {
     margin: '5px',
     width: '200px',
+    borderRadius: '9999em',
     backgroundColor: 'white',
     '&:hover': {
       backgroundColor: 'white',
@@ -41,13 +59,13 @@ const useStyles = makeStyles({
   },
   goBackButton: {
     width: '100%',
-    margin: '30px 0',
+    margin: '30px auto',
     borderRadius: '9999em',
-    backgroundColor: '#00796b',
-    color: 'white',
+    backgroundColor: 'white',
+    color: 'black',
     fontSize: '16px',
     '&:hover': {
-      backgroundColor: '#00796b',
+      backgroundColor: 'white',
     },
   },
   link: {
@@ -62,6 +80,20 @@ const useStyles = makeStyles({
     color: '#004d40',
     backgroundColor: 'white',
   },
+  editIcon: {
+    margin: '0 3px',
+    color: '#8c9eff',
+    '&:hover': {
+      cursor: 'pointer',
+    },
+  },
+  deleteIcon: {
+    margin: '0 3px',
+    color: '#ec407a',
+    '&:hover': {
+      cursor: 'pointer',
+    },
+  },
 })
 
 const Mylist = () => {
@@ -71,14 +103,84 @@ const Mylist = () => {
   const [state, setState] = useState({
     room: {
       currentList: [],
+      favorites: [],
     },
     loading: '',
     error: '',
+    newItemName: '',
+    newItemPrice: '',
+    addItemError: '',
+    deleteItemError: '',
+    editItemName: '',
+    editItemPrice: '',
+    editItemError: '',
+    editItemId: '',
   })
 
-  const { room, loading, error } = state
+  const [newItemOpen, setNewItemOpen] = useState(false)
+  const [editItemOpen, setEditItemOpen] = useState(false)
+  const [addFromFavorites, setAddFromFavorites] = useState(false)
+
+  const handleCheck = async (e) => {
+    try {
+      const { data } = await updateChecked(e.target.id, e.target.checked, token)
+      setState({ ...state, room: data })
+    } catch (error) {
+      setState({ ...state, error: error.response.data.error })
+    }
+  }
+
+  const handleClickOpen = () => {
+    setNewItemOpen(true)
+  }
+
+  const handleClose = () => {
+    setNewItemOpen(false)
+  }
+
+  const handleAddFavoriteOpen = () => {
+    setAddFromFavorites(true)
+    console.log(room.favorites)
+  }
+
+  const handleAddFavoriteClose = () => {
+    setAddFromFavorites(false)
+  }
+
+  const handleEditOpen = (currentItemId, currentListName, currentListPrice) => {
+    setEditItemOpen(true)
+    setState({
+      ...state,
+      editItemName: currentListName,
+      editItemPrice: currentListPrice,
+      editItemId: currentItemId,
+    })
+  }
+
+  const handleEditClose = () => {
+    setEditItemOpen(false)
+  }
+
+  const handleChange = (e) => {
+    setState({ ...state, [e.target.name]: e.target.value })
+  }
+
+  const {
+    room,
+    loading,
+    error,
+    newItemName,
+    newItemPrice,
+    addItemError,
+    deleteItemError,
+    editItemName,
+    editItemPrice,
+    editItemError,
+    editItemId,
+  } = state
 
   const roomDetails = async () => {
+    setState({ ...state, loading: true })
     try {
       const { data } = await getRoom(token)
       setState({
@@ -86,9 +188,88 @@ const Mylist = () => {
         loading: false,
         room: data,
       })
-      console.log(data)
     } catch (error) {
       setState({ ...state, loading: false, error: error.response.data.error })
+    }
+  }
+
+  const handleAddItem = async (e) => {
+    e.preventDefault()
+    setState({ ...state, loading: true })
+    try {
+      if (!newItemName) {
+        return setState({
+          ...state,
+          loading: false,
+          addItemError: 'חובה לבחור שם למוצר',
+        })
+      }
+      const { data } = await addItem(newItemName, newItemPrice, token)
+      setState({
+        ...state,
+        room: data,
+        loading: false,
+        newItemName: '',
+        newItemPrice: '',
+      })
+      handleClose()
+    } catch (error) {
+      setState({
+        ...state,
+        loading: false,
+        addItemError: error.response.data.error,
+      })
+    }
+  }
+
+  const handleDeleteItem = async (id, token) => {
+    setState({ ...state, loading: true })
+    try {
+      const { data } = await deleteItem(id, token)
+      setState({ ...state, room: data, loading: false })
+    } catch (error) {
+      setState({
+        ...state,
+        loading: false,
+        deleteItemError: error.response.data.error,
+      })
+    }
+  }
+
+  const handleEdit = async () => {
+    setState({ ...state, loading: true })
+
+    try {
+      const { data } = await editCurrentList(
+        editItemId,
+        editItemName,
+        editItemPrice,
+
+        token
+      )
+      setState({ ...state, room: data, loading: false })
+      handleEditClose()
+    } catch (error) {
+      setState({
+        ...state,
+        loading: false,
+        editItemError: error.response.data.error,
+      })
+    }
+  }
+
+  const handleAddFromFavorites = async (x) => {
+    setState({ ...state, loading: true })
+    try {
+      const { data } = await pushFromFavorites(x, token)
+      setState({ ...state, room: data, loading: false })
+      handleAddFavoriteClose()
+    } catch (error) {
+      setState({
+        ...state,
+        loading: false,
+        error: error.response.data.error,
+      })
     }
   }
 
@@ -102,13 +283,66 @@ const Mylist = () => {
         <h1 className={classes.header}>הרשימה שלי</h1>
       </div>
       <div className={classes.heading}>
-        <Button className={classes.headingButton} variant="contained">
+        <Button
+          onClick={handleClickOpen}
+          className={classes.headingButton}
+          variant="contained"
+        >
           מוצר חדש
         </Button>
-        <Button className={classes.headingButton} variant="contained">
+        <Button
+          endIcon={
+            <FavoriteIcon style={{ color: 'orange', marginRight: '10px' }} />
+          }
+          onClick={handleAddFavoriteOpen}
+          className={classes.headingButton}
+          variant="contained"
+        >
           מוצר מהמועדפים
         </Button>
       </div>
+
+      {loading && (
+        <div style={{ textAlign: 'center', margin: '15px 0' }}>
+          <CircularProgress />
+        </div>
+      )}
+
+      {error && (
+        <Alert
+          style={{ margin: '15px 0' }}
+          severity="error"
+          onClose={() => {
+            setState({ ...state, error: false })
+          }}
+        >
+          {<spn style={{ margin: '0 10px' }}>{error}</spn>}
+        </Alert>
+      )}
+
+      {deleteItemError && (
+        <Alert
+          style={{ margin: '15px 0' }}
+          severity="error"
+          onClose={() => {
+            setState({ ...state, error: false })
+          }}
+        >
+          {<spn style={{ margin: '0 10px' }}>{deleteItemError}</spn>}
+        </Alert>
+      )}
+
+      {editItemError && (
+        <Alert
+          style={{ margin: '15px 0' }}
+          severity="error"
+          onClose={() => {
+            setState({ ...state, error: false })
+          }}
+        >
+          {<spn style={{ margin: '0 10px' }}>{editItemError}</spn>}
+        </Alert>
+      )}
 
       <div className={classes.tableDiv}>
         {room && room.currentList.length === 0 && (
@@ -130,10 +364,52 @@ const Mylist = () => {
                 {room.currentList.map((x, i) => (
                   <TableRow key={i}>
                     <TableCell align="right">
-                      <strong>{x.name}</strong>
+                      {x.checked ? (
+                        <strong
+                          style={{
+                            textDecorationLine: 'line-through',
+                            color: 'GrayText',
+                          }}
+                        >
+                          {x.name}
+                        </strong>
+                      ) : (
+                        <strong>{x.name}</strong>
+                      )}
                     </TableCell>
                     <TableCell align="right">₪ {x.price}</TableCell>
-                    <TableCell align="right">אייקון מחיקה ועריכה</TableCell>
+                    <TableCell align="right">
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-around',
+                        }}
+                      >
+                        <span
+                          onClick={() => handleEditOpen(x._id, x.name, x.price)}
+                          className={classes.editIcon}
+                        >
+                          <Tooltip placement="top-start" title="ערוך מוצר">
+                            <EditIcon />
+                          </Tooltip>
+                        </span>
+                        <span
+                          onClick={() => handleDeleteItem(x._id, token)}
+                          className={classes.deleteIcon}
+                        >
+                          <Tooltip placement="top-start" title="מחק מוצר">
+                            <DeleteIcon />
+                          </Tooltip>
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Checkbox
+                        checked={x.checked}
+                        onChange={handleCheck}
+                        id={x._id}
+                      />
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -141,6 +417,42 @@ const Mylist = () => {
           </TableContainer>
         )}
       </div>
+
+      {/* ADD new item dialog*/}
+      <AddNewItemDialog
+        newItemOpen={newItemOpen}
+        handleClose={handleClose}
+        handleChange={handleChange}
+        newItemName={newItemName}
+        newItemPrice={newItemPrice}
+        handleAddItem={handleAddItem}
+        addItemError={addItemError}
+        setState={setState}
+        state={state}
+      />
+
+      {/* Edit item dialog*/}
+      <EditCurrentListDialog
+        editItemOpen={editItemOpen}
+        handleEditClose={handleEditClose}
+        handleChange={handleChange}
+        editItemName={editItemName}
+        editItemPrice={editItemPrice}
+        handleEdit={handleEdit}
+        editItemError={editItemError}
+        setState={setState}
+        state={state}
+      />
+
+      {/* ADD from favorites dialog*/}
+      <AddFromFavorites
+        addFromFavorites={addFromFavorites}
+        handleAddFavoriteClose={handleAddFavoriteClose}
+        room={room}
+        handleAddFromFavorites={handleAddFromFavorites}
+        setState={setState}
+        state={state}
+      />
 
       <div>
         <Link className={classes.link} to="/">

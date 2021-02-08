@@ -17,11 +17,11 @@ const useStyles = makeStyles({
     width: '100%',
     margin: '15px 0',
     borderRadius: '9999em',
-    backgroundColor: '#00796b',
+    backgroundColor: '#ffc107',
     color: 'white',
     fontSize: '16px',
     '&:hover': {
-      backgroundColor: '#00796b',
+      backgroundColor: '#ffa000',
     },
   },
   favoritesButton: {

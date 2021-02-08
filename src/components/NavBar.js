@@ -48,6 +48,7 @@ const NavBar = () => {
             <NavLink
               activeStyle={{
                 backgroundColor: '#00695c',
+                color: '#ffc107',
               }}
               className={classes.navLink}
               to="/login"
@@ -65,6 +66,7 @@ const NavBar = () => {
             <NavLink
               activeStyle={{
                 backgroundColor: '#00695c',
+                color: '#ffc107',
               }}
               className={classes.navLink}
               to="/create-room"

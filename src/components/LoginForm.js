@@ -25,16 +25,16 @@ const useStyles = makeStyles((theme) => ({
   button: {
     borderRadius: '9999em',
     margin: '15px 0',
-    backgroundColor: '#00695c',
+    backgroundColor: '#ffc107',
     fontSize: '16px',
     color: 'white',
     '&:hover': {
-      backgroundColor: '#00695c',
+      backgroundColor: '#ffa000',
     },
   },
   link: {
     textDecoration: 'none',
-    color: '#1b5e20',
+    color: '#e65100',
   },
 }))
 
@@ -118,7 +118,6 @@ const LoginForm = () => {
         />
         {error && (
           <Alert
-            variant="filled"
             style={{ margin: '15px 0' }}
             severity="error"
             onClose={() => {
