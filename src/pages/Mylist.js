@@ -4,6 +4,8 @@ import {
   Checkbox,
   CircularProgress,
   makeStyles,
+  Menu,
+  MenuItem,
   Paper,
   Table,
   TableBody,
@@ -33,7 +35,7 @@ import AddFromFavorites from '../components/AddFromFavorites'
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: '500px',
+    maxWidth: '650px',
     margin: 'auto',
   },
   heading: {
@@ -43,25 +45,35 @@ const useStyles = makeStyles({
     flexWrap: 'wrap',
   },
   headingButton: {
-    margin: '5px',
-    width: '200px',
+    margin: '10px 5px',
+    width: '180px',
     borderRadius: '9999em',
-    backgroundColor: 'white',
+    backgroundColor: '#ffcc80',
     '&:hover': {
       backgroundColor: '#ffcc80',
+    },
+  },
+  headingButton2: {
+    margin: '10px 5px',
+    width: '180px',
+    borderRadius: '9999em',
+    backgroundColor: '#eeeeee',
+    '&:hover': {
+      backgroundColor: '#eeeeee',
     },
   },
   tableDiv: {
     maxWidth: '95%',
     margin: 'auto',
     maxHeight: '400px',
+    width: '500px',
     overflowY: 'scroll',
   },
   goBackButton: {
     width: '100%',
     margin: '30px auto',
     borderRadius: '9999em',
-    backgroundColor: '#ffe0b2',
+    backgroundColor: '#ffcc80',
     color: 'black',
     fontSize: '16px',
     '&:hover': {
@@ -81,14 +93,14 @@ const useStyles = makeStyles({
     backgroundColor: 'white',
   },
   editIcon: {
-    margin: '0 3px',
+    marginLeft: '5px',
     color: '#8c9eff',
     '&:hover': {
       cursor: 'pointer',
     },
   },
   deleteIcon: {
-    margin: '0 3px',
+    marginRight: '5px',
     color: '#ec407a',
     '&:hover': {
       cursor: 'pointer',
@@ -99,6 +111,16 @@ const useStyles = makeStyles({
 const Mylist = () => {
   const classes = useStyles()
   const token = useSelector((state) => state.token)
+
+  const [menu, setMenu] = useState(null)
+
+  const handleMenuOpen = (e) => {
+    setMenu(e.currentTarget)
+  }
+
+  const handleMenuClose = () => {
+    setMenu(null)
+  }
 
   const [state, setState] = useState({
     room: {
@@ -111,10 +133,12 @@ const Mylist = () => {
     newItemPrice: '',
     addItemError: '',
     deleteItemError: '',
+    deleteItemLoading: '',
     editItemName: '',
     editItemPrice: '',
     editItemError: '',
     editItemId: '',
+    checkLoading: '',
   })
 
   const [newItemOpen, setNewItemOpen] = useState(false)
@@ -122,11 +146,16 @@ const Mylist = () => {
   const [addFromFavorites, setAddFromFavorites] = useState(false)
 
   const handleCheck = async (e) => {
+    setState({ ...state, checkLoading: e.target.id })
     try {
       const { data } = await updateChecked(e.target.id, e.target.checked, token)
-      setState({ ...state, room: data })
+      setState({ ...state, room: data, checkLoading: false })
     } catch (error) {
-      setState({ ...state, error: error.response.data.error })
+      setState({
+        ...state,
+        error: error.response.data.error,
+        checkLoading: false,
+      })
     }
   }
 
@@ -173,10 +202,12 @@ const Mylist = () => {
     newItemPrice,
     addItemError,
     deleteItemError,
+    deleteItemLoading,
     editItemName,
     editItemPrice,
     editItemError,
     editItemId,
+    checkLoading,
   } = state
 
   const roomDetails = async () => {
@@ -223,14 +254,14 @@ const Mylist = () => {
   }
 
   const handleDeleteItem = async (id, token) => {
-    setState({ ...state, loading: true })
+    setState({ ...state, deleteItemLoading: id })
     try {
       const { data } = await deleteItem(id, token)
-      setState({ ...state, room: data, loading: false })
+      setState({ ...state, room: data, deleteItemLoading: false })
     } catch (error) {
       setState({
         ...state,
-        loading: false,
+        deleteItemLoading: false,
         deleteItemError: error.response.data.error,
       })
     }
@@ -244,7 +275,6 @@ const Mylist = () => {
         editItemId,
         editItemName,
         editItemPrice,
-
         token
       )
       setState({ ...state, room: data, loading: false })
@@ -295,10 +325,17 @@ const Mylist = () => {
             <FavoriteIcon style={{ color: 'orange', marginRight: '10px' }} />
           }
           onClick={handleAddFavoriteOpen}
-          className={classes.headingButton}
+          className={classes.headingButton2}
           variant="contained"
         >
           מוצר מהמועדפים
+        </Button>
+        <Button
+          onClick={handleMenuOpen}
+          className={classes.headingButton2}
+          variant="contained"
+        >
+          אפשרויות נוספות
         </Button>
       </div>
 
@@ -393,22 +430,30 @@ const Mylist = () => {
                             <EditIcon />
                           </Tooltip>
                         </span>
-                        <span
-                          onClick={() => handleDeleteItem(x._id, token)}
-                          className={classes.deleteIcon}
-                        >
-                          <Tooltip placement="top-start" title="מחק מוצר">
-                            <DeleteIcon />
-                          </Tooltip>
-                        </span>
+                        {deleteItemLoading && deleteItemLoading === x._id ? (
+                          <CircularProgress style={{ textAlign: 'center' }} />
+                        ) : (
+                          <span
+                            onClick={() => handleDeleteItem(x._id, token)}
+                            className={classes.deleteIcon}
+                          >
+                            <Tooltip placement="top-start" title="מחק מוצר">
+                              <DeleteIcon />
+                            </Tooltip>
+                          </span>
+                        )}
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Checkbox
-                        checked={x.checked}
-                        onChange={handleCheck}
-                        id={x._id}
-                      />
+                      {checkLoading && checkLoading === x._id ? (
+                        <CircularProgress style={{ textAlign: 'center' }} />
+                      ) : (
+                        <Checkbox
+                          checked={x.checked}
+                          onChange={handleCheck}
+                          id={x._id}
+                        />
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -453,6 +498,19 @@ const Mylist = () => {
         setState={setState}
         state={state}
       />
+
+      <Menu
+        id="menu"
+        anchorEl={menu}
+        keepMounted
+        open={Boolean(menu)}
+        onClose={handleMenuClose}
+      >
+        <MenuItem onClick={handleMenuClose}>סמן הכל</MenuItem>
+        <MenuItem onClick={handleMenuClose}>בטל סימונים</MenuItem>
+        <MenuItem onClick={handleMenuClose}>מחק מסומנים</MenuItem>
+        <MenuItem onClick={handleMenuClose}>מחק הכל</MenuItem>
+      </Menu>
 
       <div>
         <Link className={classes.link} to="/">

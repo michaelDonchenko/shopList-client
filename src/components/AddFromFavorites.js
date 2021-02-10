@@ -45,7 +45,7 @@ const AddFromFavorites = ({
                     <TableRow>
                       <TableCell align="right">שם המוצר</TableCell>
                       <TableCell align="right">מחיר</TableCell>
-                      <TableCell align="right">סמן</TableCell>
+                      <TableCell align="right"></TableCell>
                     </TableRow>
                   </TableHead>
 

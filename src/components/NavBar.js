@@ -72,6 +72,18 @@ const NavBar = () => {
                 הרשמה
               </Button>
             </NavLink>
+
+            <NavLink
+              activeStyle={{
+                backgroundColor: '#e65100',
+              }}
+              className={classes.navLink}
+              to="/about"
+            >
+              <Button style={{ fontSize: '16px' }} color="inherit">
+                אודות
+              </Button>
+            </NavLink>
           </>
         )}
 

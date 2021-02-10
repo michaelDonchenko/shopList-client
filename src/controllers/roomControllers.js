@@ -11,6 +11,21 @@ export const register = async (name, password, passwordConfirm) =>
     passwordConfirm,
   })
 
+export const updateDetails = async (name, password, passwordConfirm, token) =>
+  await axios.put(
+    `${REACT_APP_SERVER_URL}/api/room/roomDetails`,
+    {
+      name,
+      password,
+      passwordConfirm,
+    },
+    {
+      headers: {
+        authToken: token,
+      },
+    }
+  )
+
 export const getRoom = async (token) =>
   await axios.get(`${REACT_APP_SERVER_URL}/api/room`, {
     headers: {

@@ -42,7 +42,7 @@ const useStyles = makeStyles({
     margin: '5px',
     width: '200px',
     borderRadius: '9999em',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#eeeeee',
     '&:hover': {
       backgroundColor: '#eeeeee',
     },
@@ -57,7 +57,7 @@ const useStyles = makeStyles({
     width: '100%',
     margin: '30px 0',
     borderRadius: '9999em',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#eeeeee',
     color: 'black',
     fontSize: '16px',
     '&:hover': {

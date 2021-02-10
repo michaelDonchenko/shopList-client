@@ -17,7 +17,7 @@ const useStyles = makeStyles({
     width: '100%',
     margin: '15px 0',
     borderRadius: '9999em',
-    backgroundColor: '#ffe0b2',
+    backgroundColor: '#ffcc80',
     color: 'black',
     fontSize: '16px',
     '&:hover': {
@@ -28,7 +28,18 @@ const useStyles = makeStyles({
     width: '100%',
     margin: '15px 0',
     borderRadius: '9999em',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#eeeeee',
+    color: 'black',
+    fontSize: '16px',
+    '&:hover': {
+      backgroundColor: '#eeeeee',
+    },
+  },
+  roomDetailsButton: {
+    width: '100%',
+    margin: '15px 0',
+    borderRadius: '9999em',
+    backgroundColor: '#eeeeee',
     color: 'black',
     fontSize: '16px',
     '&:hover': {
@@ -67,6 +78,12 @@ const Main = () => {
           variant="contained"
         >
           <span style={{ marginLeft: '10px' }}>ערוך מוצרים מועדפים</span>
+        </Button>
+      </Link>
+
+      <Link className={classes.link} to="/roomDetails">
+        <Button className={classes.roomDetailsButton} variant="contained">
+          <span>ערוך פרטי חדר</span>
         </Button>
       </Link>
     </div>
