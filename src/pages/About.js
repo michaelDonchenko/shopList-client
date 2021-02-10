@@ -9,10 +9,9 @@ const useStyles = makeStyles((theme) => ({
   },
   paperBlock: {
     [theme.breakpoints.down('xs')]: { width: '85%' },
-    [theme.breakpoints.up('sm')]: { width: '450px' },
+    [theme.breakpoints.up('sm')]: { width: '400px' },
     textAlign: 'center',
     marginTop: '30px',
-    minHeight: '400px',
     padding: '20px 10px',
   },
 }))
