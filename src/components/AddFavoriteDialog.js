@@ -66,6 +66,7 @@ const AddFavoriteDialog = ({
           <Button onClick={handleAddFavorite} type="submit" color="primary">
             הוסף למועדפים
           </Button>
+          <Button onClick={handleClose}>ביטול</Button>
         </DialogActions>
       </Dialog>
     </div>

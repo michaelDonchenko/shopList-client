@@ -23,6 +23,10 @@ import {
   editCurrentList,
   updateChecked,
   pushFromFavorites,
+  checkAll,
+  uncheckAll,
+  deleteChecked,
+  deleteAll,
 } from '../controllers/roomControllers'
 import { useSelector } from 'react-redux'
 import EditIcon from '@material-ui/icons/Edit'
@@ -303,6 +307,66 @@ const Mylist = () => {
     }
   }
 
+  const handleCheckAll = async () => {
+    setState({ ...state, loading: true })
+    try {
+      const { data } = await checkAll({}, token)
+      setState({ ...state, room: data, loading: false })
+      handleMenuClose()
+    } catch (error) {
+      setState({
+        ...state,
+        loading: false,
+        error: error.response.data.error,
+      })
+    }
+  }
+
+  const handleUncheckAll = async () => {
+    setState({ ...state, loading: true })
+    try {
+      const { data } = await uncheckAll({}, token)
+      setState({ ...state, room: data, loading: false })
+      handleMenuClose()
+    } catch (error) {
+      setState({
+        ...state,
+        loading: false,
+        error: error.response.data.error,
+      })
+    }
+  }
+
+  const handleDeleteChecked = async () => {
+    setState({ ...state, loading: true })
+    try {
+      const { data } = await deleteChecked({}, token)
+      setState({ ...state, room: data, loading: false })
+      handleMenuClose()
+    } catch (error) {
+      setState({
+        ...state,
+        loading: false,
+        error: error.response.data.error,
+      })
+    }
+  }
+
+  const handleDeleteAll = async () => {
+    setState({ ...state, loading: true })
+    try {
+      const { data } = await deleteAll({}, token)
+      setState({ ...state, room: data, loading: false })
+      handleMenuClose()
+    } catch (error) {
+      setState({
+        ...state,
+        loading: false,
+        error: error.response.data.error,
+      })
+    }
+  }
+
   useEffect(() => {
     roomDetails()
   }, [])
@@ -506,10 +570,10 @@ const Mylist = () => {
         open={Boolean(menu)}
         onClose={handleMenuClose}
       >
-        <MenuItem onClick={handleMenuClose}>סמן הכל</MenuItem>
-        <MenuItem onClick={handleMenuClose}>בטל סימונים</MenuItem>
-        <MenuItem onClick={handleMenuClose}>מחק מסומנים</MenuItem>
-        <MenuItem onClick={handleMenuClose}>מחק הכל</MenuItem>
+        <MenuItem onClick={handleCheckAll}>סמן הכל</MenuItem>
+        <MenuItem onClick={handleUncheckAll}>בטל סימונים</MenuItem>
+        <MenuItem onClick={handleDeleteChecked}>מחק מסומנים</MenuItem>
+        <MenuItem onClick={handleDeleteAll}>מחק הכל</MenuItem>
       </Menu>
 
       <div>

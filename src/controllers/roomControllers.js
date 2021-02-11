@@ -121,3 +121,47 @@ export const pushFromFavorites = async (item, token) =>
       },
     }
   )
+
+export const checkAll = async ({}, token) =>
+  await axios.post(
+    `${REACT_APP_SERVER_URL}/api/room/checkAll`,
+    {},
+    {
+      headers: {
+        authToken: token,
+      },
+    }
+  )
+
+export const uncheckAll = async ({}, token) =>
+  await axios.post(
+    `${REACT_APP_SERVER_URL}/api/room/uncheckAll`,
+    {},
+    {
+      headers: {
+        authToken: token,
+      },
+    }
+  )
+
+export const deleteChecked = async ({}, token) =>
+  await axios.post(
+    `${REACT_APP_SERVER_URL}/api/room/deleteChecked`,
+    {},
+    {
+      headers: {
+        authToken: token,
+      },
+    }
+  )
+
+export const deleteAll = async ({}, token) =>
+  await axios.post(
+    `${REACT_APP_SERVER_URL}/api/room/deleteAll`,
+    {},
+    {
+      headers: {
+        authToken: token,
+      },
+    }
+  )

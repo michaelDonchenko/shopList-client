@@ -72,6 +72,9 @@ const AddFromFavorites = ({
             )}
           </div>
         </DialogContent>
+        <DialogActions>
+          <Button onClick={handleAddFavoriteClose}>ביטול</Button>
+        </DialogActions>
       </Dialog>
     </div>
   )

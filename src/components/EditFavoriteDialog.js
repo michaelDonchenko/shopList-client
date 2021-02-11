@@ -66,6 +66,7 @@ const EditFavoriteDialog = ({
           <Button onClick={handleEdit} type="submit" color="primary">
             ערוך מוצר
           </Button>
+          <Button onClick={handleEditClose}>ביטול</Button>
         </DialogActions>
       </Dialog>
     </div>

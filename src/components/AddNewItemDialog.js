@@ -66,6 +66,7 @@ const AddNewItemDialog = ({
           <Button onClick={handleAddItem} type="submit" color="primary">
             הוסף מוצר
           </Button>
+          <Button onClick={handleClose}>ביטול</Button>
         </DialogActions>
       </Dialog>
     </div>
